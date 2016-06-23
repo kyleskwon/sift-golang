@@ -18,7 +18,7 @@ var (
 	testApiKey         = "xxx"
 	testValidApiConfig = fmt.Sprintf(`{"config": {"api_key": "%s"}}`, testApiKey)
 	testApiError       = `{ "time" : 1463168681 , "status" : 51 , "request" : "{\"$api_key\":\"xxx\"}" , "error_message" : "Invalid API Key. Please check your credentials and try again."}`
-	testEventOK        = `{ "status" : 0 , "error_message" : "OK" , "time" : 1463168322 , "request" : "{\"$api_key\":\"xxx\",\"$type\":\"my_custom_event\",\"$user_id\":\"test@someone.com\",\"hello\":\"world\",\"return_action\":true,\"return_score\":true}"}`
+	testEventOK        = `{ "status" : 0 , "error_message" : "OK" , "time" : 1463168322 , "request" : "{\"$api_key\":\"xxx\",\"$type\":\"my_custom_event\",\"$user_id\":\"test@someone.com\",\"hello\":\"world\"}"}`
 	testScoreOK        = `{ "status" : 0 , "error_message" : "OK" , "score" : 0.3275949342030485 , "user_id" : "test@someone.com" , "latest_label" : { "is_bad" : false , "time" : 1463167642} , "actions" : [ ]}`
 	testLabelOK        = `{ "time" : 1463168323 , "status" : 0 , "request" : "{\"$api_key\":\"25a031275f740846\",\"$is_bad\":false}" , "error_message" : "OK"}`
 )
@@ -139,10 +139,8 @@ func TestSiftClientTrackRequest(t *testing.T) {
 			"my_custom_event",
 			map[string]interface{}{
 				"$user_id": "test@someone.com", "hello": "world",
-			}, map[string]interface{}{
-				"return_score":  true,
-				"return_action": true,
 			},
+			false,
 		)
 
 		So(r, ShouldHaveSameTypeAs, &Response{})
@@ -309,10 +307,8 @@ func BenchmarkSiftClientTrackRequest(b *testing.B) {
 			"my_custom_event",
 			map[string]interface{}{
 				"$user_id": "test@someone.com", "hello": "world",
-			}, map[string]interface{}{
-				"return_score":  true,
-				"return_action": true,
 			},
+			false,
 		)
 	}
 }

@@ -69,11 +69,7 @@ func main() {
 		"$order_id":         "ORDER-123124124",
 	}
 
-	extras := map[string]interface{}{
-		"return_action": true,
-	}
-
-	r, err := s.Track(eventName, data, extras)
+	r, err := s.Track(eventName, data, true)
 	if err != nil {
 		log.Fatal(err)
 	}

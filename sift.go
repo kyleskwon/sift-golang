@@ -14,20 +14,22 @@ type Sift struct {
 }
 
 // Track - Send tracking event towards sift science
-func (s *Sift) Track(event string, params map[string]interface{}, args map[string]interface{}) (*Response, error) {
+func (s *Sift) Track(event string, params map[string]interface{}, returnAction bool) (*Response, error) {
 	// The name of the event to send. This can either be a reserved
 	// event name such as "$transaction" or "$create_order" or a custom event
 	// name (that does not start with a $).
 	params["$type"] = event
 
+	eventsUrl := s.GetEventsUrl()
+
 	// Whether the API response should include actions in the response. For
 	// more information on how this works, please visit the tutorial at:
 	// https://siftscience.com/resources/tutorials/formulas
-	if action, ok := args["return_action"]; ok {
-		params["return_action"] = action.(bool)
+	if returnAction {
+		eventsUrl += "?return_action=true"
 	}
 
-	return s.HttpRequest("POST", s.GetEventsUrl(), params)
+	return s.HttpRequest("POST", eventsUrl, params)
 }
 
 // Score - Get out user score
